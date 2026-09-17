@@ -3,198 +3,284 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VELUXE EXPRESS - Track Your Package</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<title>VELUXE EXPRESS - Live Tracking</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Space Grotesk',sans-serif;background:#fafaf7;color:#0a0a0a}
-header{position:sticky;top:0;z-index:50;background:#fafaf7;border-bottom:1px solid #e5e5e0;display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
-.logo{font-size:24px;font-weight:700;letter-spacing:5px}
-.nav{display:none;gap:18px;font-size:11px;letter-spacing:2px;text-transform:uppercase}
-.nav span{cursor:pointer}
-.btn{padding:10px 18px;border:1px solid #000;border-radius:20px;background:#fff;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer}
-.hero{padding:30px 20px;display:grid;grid-template-columns:1fr}
-.hero h1{font-size:36px;letter-spacing:-1px;line-height:.9}
-.hero p{font-size:12px;letter-spacing:2px;margin-top:8px;text-transform:uppercase}
-.track-box{margin-top:20px;display:flex;gap:10px}
-.track-box input{flex:1;padding:16px;border:1px solid #ddd;border-radius:10px;font-size:16px;font-family:inherit;letter-spacing:1px}
-.track-btn{padding:0 28px;background:#000;color:#fff;border:0;border-radius:10px;font-weight:700;letter-spacing:1px;cursor:pointer}
-.hint{font-size:11px;color:#777;margin-top:10px}
-.status{margin-top:30px}
-.status h3{font-size:14px;letter-spacing:1px;margin-bottom:16px;text-transform:uppercase}
-.timeline{border-left:1px dashed #ccc;margin-left:20px;padding-left:0}
-.step{display:flex;gap:14px;padding:14px 0 14px 0;position:relative;border-bottom:1px solid #eee}
-.step:last-child{border:0}
-.dot{width:40px;height:40px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;margin-left:-20px;flex-shrink:0}
-.dot.pending{background:#fff;border:2px solid #000;color:#000}
-.step-info{flex:1}
-.step-info b{font-size:13px;display:block}
-.step-info span{font-size:11px;color:#666;display:block;margin-top:2px}
-.step-time{font-size:11px;color:#000;font-weight:600}
-.card{margin:20px;background:#fff;border:1px solid #e5e5e0;border-radius:16px;padding:16px}
-.card h3{font-size:13px;letter-spacing:1px;margin-bottom:12px}
-.card input,.card select{width:100%;padding:12px;border:1px solid #e5e5e0;border-radius:8px;margin-top:8px;font-family:inherit}
-.create-btn{width:100%;margin-top:14px;padding:16px;background:#000;color:#fff;border:0;border-radius:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
-.code-box{margin-top:16px;padding:16px;background:#000;color:#fff;border-radius:12px;text-align:center;display:none}
-.code-box b{font-size:22px;letter-spacing:3px;display:block;margin-top:6px}
-.footer{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:20px;font-size:10px;border-top:1px solid #e5e5e0;margin-top:20px}
-.footer b{display:block;margin-bottom:6px;font-size:11px}
-@media(min-width:800px){.hero{grid-template-columns:1fr 1fr;gap:40px;align-items:start}.nav{display:flex}}
+body{font-family:'Space Grotesk',sans-serif;background:#fbfaf6;color:#111}
+header{position:sticky;top:0;z-index:100;background:#fbfaf6f0;backdrop-filter:blur(12px);border-bottom:1px solid #e8e6de;display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
+.logo{font-size:22px;font-weight:700;letter-spacing:5px}
+.btn{padding:10px 16px;border:1px solid #111;border-radius:20px;background:#fff;font-weight:700;font-size:10px;cursor:pointer}
+.hero{padding:20px 16px;max-width:1200px;margin:0 auto}
+.hero h1{font-size:30px;letter-spacing:-1px;line-height:.9}
+.sub{font-size:10px;letter-spacing:2px;opacity:.6;margin-top:6px;text-transform:uppercase}
+.track-wrap{margin-top:16px;background:#fff;border:1px solid #e8e6de;border-radius:14px;padding:10px;display:flex;gap:8px}
+.track-wrap input{flex:1;padding:12px;border:1px solid #eee;border-radius:8px;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.track-btn{padding:0 20px;background:#111;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer}
+.grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
+@media(min-width:900px){.grid{grid-template-columns:1.1fr.9fr}}
+.card{background:#fff;border:1px solid #e8e6de;border-radius:16px;padding:16px}
+.card h3{font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
+#map{height:340px;border-radius:14px;z-index:1}
+.timeline{padding-left:24px;position:relative}
+.timeline::before{content:'';position:absolute;left:9px;top:10px;bottom:10px;width:1px;border-left:1px dashed #bbb}
+.step{position:relative;display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f0eee8}
+.dot{position:absolute;left:-24px;width:20px;height:20px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px}
+.dot.pending{background:#fff;border:2px solid #111;color:#111}
+.live-badge{animation:pulse 1.5s infinite;background:#ff3b30;color:#fff;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+@keyframes pulse{0%{opacity:1}50%{opacity:.6}100%{opacity:1}}
+.mono{font-family:'JetBrains Mono',monospace}
+.input{width:100%;padding:12px;border:1px solid #e8e6de;border-radius:10px;margin-top:8px;font-family:inherit}
+.create-btn{width:100%;margin-top:12px;padding:14px;background:#111;color:#fff;border:0;border-radius:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
+.loc-row{display:flex;gap:8px;margin-top:8px}
+.loc-row button{flex:1;padding:10px;border:1px solid #111;border-radius:8px;background:#fff;font-size:11px;font-weight:700;cursor:pointer}
 </style>
 </head>
 <body>
 <header>
 <div class="logo">VELUXE</div>
-<div class="nav"><span onclick="showTrack()">HOME</span><span>•</span><span>SERVICES</span><span>•</span><span onclick="showTrack()">TRACK</span><span>•</span><span onclick="showCreate()">SHIP</span><span>•</span><span>CONTACT</span></div>
-<button class="btn" onclick="alert('Login coming soon')">SIGN IN</button>
+<button class="btn" onclick="showCreate()">+ NEW SHIPMENT</button>
 </header>
 
-<div id="trackView">
-<div class="hero">
-<div>
-<h1>TRACK YOUR PACKAGE</h1>
-<p>Enter Tracking Code</p>
-<div class="track-box">
-<input id="trackInput" placeholder="VLX-892734" value="VLX-892734">
+<div id="trackView" class="hero">
+<h1>Live Package Tracking</h1>
+<div class="sub">Enter code • See package moving live on map</div>
+<div class="track-wrap">
+<input id="trackInput" placeholder="VLX-892734">
 <button class="track-btn" onclick="trackPackage()">TRACK</button>
 </div>
-<div class="hint">Enter your tracking number to view real-time shipment updates and delivery status</div>
 
-<div class="status" id="statusArea">
-<h3>Shipment Status</h3>
+<div class="grid">
+<div>
+<div class="card">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+<h3 style="margin:0">Shipment Status</h3><div class="live-badge">● LIVE</div>
+</div>
 <div class="timeline" id="timeline"></div>
 </div>
+
+<div class="card" id="courierCard" style="display:none">
+<h3>🚚 Courier Live Location</h3>
+<div id="courierInfo" style="font-size:12px"></div>
+<div class="loc-row">
+<button onclick="shareCourierLocation()">📍 Share My Live Location (Courier)</button>
+<button onclick="simulateMovement()">▶️ Simulate Movement</button>
+</div>
+<div style="font-size:10px;color:#777;margin-top:8px">Courier click first button to update real location via GPS. Customer go see package dey move instantly!</div>
+</div>
 </div>
 
-<div style="padding:20px">
+<div>
+<div class="card">
+<h3>🗺️ Live Map - Package Location</h3>
+<div id="map"></div>
+<div id="mapInfo" style="margin-top:10px;font-size:11px;color:#555"></div>
+</div>
+
 <div class="card">
 <h3>📦 Package Details</h3>
-<div id="pkgDetails" style="font-size:12px;line-height:1.8;color:#555">Enter tracking code to view details</div>
+<div id="pkgDetails" style="font-size:12px;line-height:1.8"></div>
+<div id="shareBox" style="margin-top:12px;display:none">
+<div style="font-size:10px;font-weight:700;letter-spacing:1px">SHAREABLE TRACKING LINK (Works for anyone):</div>
+<div id="shareLink" style="margin-top:6px;background:#111;color:#0f0;padding:8px;border-radius:8px;font-size:9px;word-break:break-all;font-family:'JetBrains Mono',monospace"></div>
+<button class="create-btn" style="background:#fff;color:#111;border:1px solid #111;margin-top:8px" onclick="copyLink()">Copy Link + WhatsApp Customer</button>
+</div>
+</div>
+</div>
+</div>
 </div>
 
+<div id="createView" style="display:none;padding:16px;max-width:560px;margin:0 auto">
 <div class="card">
-<h3>Try Demo Code</h3>
-<div style="font-size:11px;color:#666">Use this test code: <b>VLX-892734</b><br><br>Or create new shipment below to generate your own tracking code!</div>
-<button class="create-btn" style="background:#fff;color:#000;border:1px solid #000" onclick="showCreate()">Create Shipment + Get Tracking Code</button>
+<h3>🚀 Create Shipment With Live Tracking</h3>
+<input id="sName" class="input" value="VELUXE Store" placeholder="Sender">
+<input id="rName" class="input" placeholder="Receiver Name *">
+<input id="rPhone" class="input" placeholder="Receiver Phone e.g 07067087764">
+<input id="rAddress" class="input" placeholder="Delivery Address * e.g Enerhen, Warri">
+<input id="fromLoc" class="input" placeholder="From Location e.g Warri Hub" value="Warri Hub, Delta State">
+<div class="loc-row">
+<button onclick="useMyLocation('from')">📍 Use My Location as Pickup</button>
+<button onclick="useMyLocation('to')">📍 Use My Location as Delivery</button>
+</div>
+<select id="itemType" class="input"><option>VELUXE Hoodie</option><option>VELUXE Cargo</option><option>Documents</option><option>Other</option></select>
+<button class="create-btn" onclick="createShipment()">Generate Live Tracking Link</button>
+<div id="codeResult" style="display:none;margin-top:16px;background:#111;color:#fff;border-radius:14px;padding:16px;text-align:center">
+<div style="font-size:10px;opacity:.6">TRACKING CODE</div>
+<b id="genCode" style="font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:3px;display:block;margin:8px 0"></b>
+<div id="genLink" style="background:#222;padding:8px;border-radius:8px;font-size:9px;word-break:break-all;font-family:'JetBrains Mono',monospace;margin-top:10px"></div>
+<button class="create-btn" style="background:#fff;color:#000" onclick="copyGen()">Copy + Share via WhatsApp</button>
+<button class="create-btn" style="background:transparent;border:1px solid #fff" onclick="openGen()">Open Live Tracking</button>
 </div>
 </div>
+<button class="btn" style="margin:20px auto;display:block" onclick="showTrack()">← Back to Track</button>
 </div>
-</div>
-
-<div id="createView" style="display:none;padding:20px">
-<div class="card" style="max-width:500px;margin:0 auto">
-<h3>🚚 Create New Shipment - Generate Tracking Code</h3>
-<input id="sName" placeholder="Sender Name">
-<input id="sPhone" placeholder="Sender Phone e.g 07067087764">
-<input id="rName" placeholder="Receiver Name">
-<input id="rPhone" placeholder="Receiver Phone">
-<input id="rAddress" placeholder="Receiver Address e.g Warri, Delta">
-<select id="itemType"><option>Clothes (VELUXE)</option><option>Documents</option><option>Electronics</option><option>Food</option><option>Other Package</option></select>
-<select id="service"><option>Express (24hrs) - $15</option><option>Same Day - $25</option><option>Next Day - $10</option></select>
-<button class="create-btn" onclick="createShipment()">Generate Tracking Code</button>
-
-<div id="codeResult" class="code-box">
-<div style="font-size:10px;letter-spacing:2px;opacity:.7">YOUR TRACKING CODE</div>
-<b id="generatedCode">VLX-XXXXXX</b>
-<div style="font-size:11px;margin-top:10px">Share this code with receiver to track!</div>
-<button class="create-btn" style="background:#fff;color:#000;margin-top:14px" onclick="copyCode()">Copy Code + Track via WhatsApp</button>
-<button class="create-btn" style="background:transparent;color:#fff;border:1px solid #fff;margin-top:8px" onclick="showTrack()">Track Now</button>
-</div>
-</div>
-</div>
-
-<div class="footer">
-<div><b>DELIVERY</b>Express Delivery • Same Day • Scheduled</div>
-<div><b>SUPPORT</b>Help Center • FAQs • Contact - 07067087764</div>
-<div><b>VELUXE</b>About • Careers • Security</div>
-</div>
-<div style="text-align:center;padding:12px;font-size:9px;letter-spacing:1px;opacity:.5">© 2024 VELUXE — PREMIUM COURIER SERVICE • PRIVACY • TERMS</div>
 
 <script>
-// Storage
-let shipments = JSON.parse(localStorage.getItem("veluxe_shipments")||"{}");
-// Demo shipment
-if(!shipments["VLX-892734"]){
-shipments["VLX-892734"]={
-code:"VLX-892734",sender:"VELUXE Store",receiver:"John Doe",address:"Warri, Delta State",item:"VELUXE Hoodie - Onyx",service:"Express",
-timeline:[
-{title:"Order Placed",desc:"Label created",time:"Oct 12, 09:14 AM",done:true},
-{title:"Picked Up",desc:"Package picked up by VELUXE courier",time:"Oct 12, 10:32 AM",done:true},
-{title:"In Transit",desc:"Departed sorting facility, en route to local hub",time:"Oct 12, 02:45 PM",done:true},
-{title:"Out for Delivery",desc:"With courier, scheduled for delivery today",time:"Oct 12, 05:10 PM",done:true},
-{title:"Estimated Delivery",desc:"On track, delivery arriving soon",time:"Today • 6:30 PM",done:false}
-]
+let map, marker, routeLine, courierMarker;
+let currentData=null, currentLink="";
+let watchId=null;
+
+// Warri default coords
+const WARRI = [5.517, 5.75];
+const LOCATIONS = {
+"Warri Hub, Delta State": [5.517, 5.75],
+"Enerhen, Warri": [5.53, 5.78],
+"Effurun": [5.56, 5.78],
+"PTI, Warri": [5.57, 5.80],
+"Sapele Road": [5.51, 5.73],
+"Lagos": [6.524, 3.379],
+"PH": [4.815, 7.049]
 };
-localStorage.setItem("veluxe_shipments",JSON.stringify(shipments));
+
+function initMap(){
+if(map) return;
+map = L.map('map').setView(WARRI, 12);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
 }
 
-function trackPackage(){
-const code=document.getElementById("trackInput").value.trim().toUpperCase();
-if(!code)return alert("Enter tracking code");
-const data=shipments[code];
-if(!data){
-document.getElementById("timeline").innerHTML=`<div style="padding:20px;color:#888;font-size:12px">❌ Tracking code <b>${code}</b> not found.<br>Create new shipment to generate valid code.</div>`;
-document.getElementById("pkgDetails").innerHTML=`Code <b>${code}</b> not found.`;
-return;
-}
-renderTimeline(data);
-document.getElementById("pkgDetails").innerHTML=`<b>Code:</b> ${data.code}<br><b>From:</b> ${data.sender}<br><b>To:</b> ${data.receiver}<br><b>Address:</b> ${data.address}<br><b>Item:</b> ${data.item}<br><b>Service:</b> ${data.service}`;
-}
+function encodeData(o){ return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function decodeData(s){ try{ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4)s+='='; return JSON.parse(decodeURIComponent(escape(atob(s)))); }catch(e){return null;} }
 
-function renderTimeline(data){
-const html=data.timeline.map(t=>`
-<div class="step">
-<div class="dot ${t.done?'':'pending'}">${t.done?'✓':'•'}</div>
-<div class="step-info"><b>${t.title}</b><span>${t.desc}</span></div>
-<div class="step-time">${t.time}</div>
-</div>`).join("");
-document.getElementById("timeline").innerHTML=html;
+function getCoordsForAddress(addr){
+for(let k in LOCATIONS){ if(addr.toLowerCase().includes(k.toLowerCase().split(',')[0].toLowerCase())) return LOCATIONS[k]; }
+return [WARRI[0]+(Math.random()-0.5)*0.2, WARRI[1]+(Math.random()-0.5)*0.2];
 }
 
 function createShipment(){
-const sName=document.getElementById("sName").value||"VELUXE Store";
-const sPhone=document.getElementById("sPhone").value||"07067087764";
-const rName=document.getElementById("rName").value;
-const rPhone=document.getElementById("rPhone").value;
-const rAddress=document.getElementById("rAddress").value;
-const itemType=document.getElementById("itemType").value;
-const service=document.getElementById("service").value;
-if(!rName||!rAddress)return alert("Enter receiver name and address");
-
-// Generate unique tracking code like VLX-892734
+const rName=document.getElementById('rName').value.trim();
+const rAddress=document.getElementById('rAddress').value.trim();
+if(!rName||!rAddress) return alert("Enter receiver and address");
+const fromAddr=document.getElementById('fromLoc').value||"Warri Hub, Delta State";
+const fromCoords = window._fromCoords || getCoordsForAddress(fromAddr);
+const toCoords = window._toCoords || getCoordsForAddress(rAddress);
 const code="VLX-"+Math.floor(100000+Math.random()*900000);
-const now=new Date().toLocaleString();
-
-shipments[code]={
-code, sender:sName, senderPhone:sPhone, receiver:rName, receiverPhone:rPhone, address:rAddress, item:itemType, service,
+const data={
+code, sender:document.getElementById('sName').value, receiver:rName, phone:document.getElementById('rPhone').value,
+from:fromAddr, address:rAddress, fromCoords, toCoords, courierCoords: fromCoords,
+item:document.getElementById('itemType').value, created:new Date().toLocaleString(),
 timeline:[
-{title:"Order Placed",desc:`Label created by ${sName}`,time:now,done:true},
-{title:"Picked Up",desc:"Awaiting pickup by VELUXE courier",time:"Pending",done:false},
-{title:"In Transit",desc:"Will depart sorting facility",time:"Pending",done:false},
-{title:"Out for Delivery",desc:"Scheduled for delivery",time:"Pending",done:false},
-{title:"Estimated Delivery",desc:"On track",time:"Tomorrow",done:false}
+{title:"Order Placed",desc:"Label created",time:new Date().toLocaleString(),done:true},
+{title:"Picked Up",desc:"At Warri Hub",time:new Date().toLocaleString(),done:true},
+{title:"In Transit",desc:`En route to ${rAddress}`,time:"Now • Live",done:true},
+{title:"Out for Delivery",desc:"Courier is nearby",time:"Next",done:false},
+{title:"Delivered",desc:"Estimated today 6:30 PM",time:"Pending",done:false}
 ]
 };
-localStorage.setItem("veluxe_shipments",JSON.stringify(shipments));
-
-document.getElementById("generatedCode").textContent=code;
-document.getElementById("codeResult").style.display="block";
-document.getElementById("trackInput").value=code;
-window.scrollTo(0,0);
+const enc=encodeData(data);
+const link=`${location.origin+location.pathname}?track=${code}&d=${enc}`;
+document.getElementById('genCode').textContent=code;
+document.getElementById('genLink').textContent=link;
+document.getElementById('codeResult').style.display="block";
+window._lastData=data; window._lastLink=link;
+currentData=data; currentLink=link;
 }
 
-function copyCode(){
-const code=document.getElementById("generatedCode").textContent;
-navigator.clipboard.writeText(code);
-const text=encodeURIComponent(`🚚 VELUXE EXPRESS - New Shipment!\n\nTracking Code: *${code}*\nTrack here: https://veluxe820.github.io/VELUXE-EXPRESS/\n\nSender: ${document.getElementById("sName").value}\nReceiver: ${document.getElementById("rName").value}\nAddress: ${document.getElementById("rAddress").value}\nItem: ${document.getElementById("itemType").value}\n\nShare this code with customer to track!`);
-window.open(`https://wa.me/2347067087764?text=${text}`,"_blank");
+function copyGen(){
+if(!window._lastLink) return;
+navigator.clipboard.writeText(window._lastLink);
+const t=encodeURIComponent(`🚚 VELUXE EXPRESS - LIVE TRACKING!\n\nCode: *${window._lastData.code}*\nTo: ${window._lastData.receiver}\nFrom: ${window._lastData.from} → ${window._lastData.address}\n\n🔴 LIVE MAP - See package moving:\n${window._lastLink}\n\nTrack am live!`);
+window.open(`https://wa.me/2347067087764?text=${t}`,"_blank");
 }
 
-function showCreate(){document.getElementById("trackView").style.display="none";document.getElementById("createView").style.display="block"}
-function showTrack(){document.getElementById("createView").style.display="none";document.getElementById("trackView").style.display="block";trackPackage()}
+function openGen(){ if(window._lastLink) location.href=window._lastLink; }
 
-// Auto track demo on load
+function trackPackage(){
+let code=document.getElementById('trackInput').value.trim().toUpperCase();
+const params=new URLSearchParams(location.search);
+if(!code) code=params.get('track')||"VLX-892734";
+let data=null;
+const enc=params.get('d');
+if(enc){ data=decodeData(enc); if(data && data.code!==code &&!params.get('track')) code=data.code; }
+if(!data && code==="VLX-892734"){
+data={code:"VLX-892734",sender:"VELUXE Store",receiver:"Demo Customer",from:"Warri Hub",address:"Enerhen, Warri",fromCoords:WARRI,toCoords:[5.53,5.78],courierCoords:[5.525,5.76],item:"VELUXE Hoodie",created:"Oct 12, 09:14 AM",
+timeline:[
+{title:"Order Placed",desc:"Label created",time:"Oct 12, 09:14 AM",done:true},
+{title:"Picked Up",desc:"Picked at Warri Hub",time:"Oct 12, 10:32 AM",done:true},
+{title:"In Transit",desc:"En route to Enerhen - LIVE",time:"Now • 2.3km away",done:true},
+{title:"Out for Delivery",desc:"Courier nearby",time:"Next 15 mins",done:false},
+{title:"Delivered",desc:"Today 6:30 PM",time:"Pending",done:false}
+]};
+}
+if(!data){ alert("Code not found. Use VLX-892734 demo or create new shipment"); return; }
+
+currentData=data;
+initMap();
+renderTimeline(data);
+document.getElementById('pkgDetails').innerHTML=`<span class="mono">${data.code}</span> • <b style="color:green">LIVE</b><br><b>From:</b> ${data.from}<br><b>To:</b> ${data.receiver} - ${data.address}<br><b>Item:</b> ${data.item}<br><b>Courier:</b> 07067087764<br><b>Distance:</b> ~${calcDist(data.fromCoords,data.toCoords).toFixed(1)} km`;
+document.getElementById('courierCard').style.display="block";
+document.getElementById('courierInfo').innerHTML=`📦 Package at: <span class="mono">${data.courierCoords[0].toFixed(4)}, ${data.courierCoords[1].toFixed(4)}</span><br>📍 Destination: ${data.address}`;
+
+// Map update
+setTimeout(()=>{
+map.setView(data.courierCoords,13);
+if(marker) map.removeLayer(marker);
+if(courierMarker) map.removeLayer(courierMarker);
+if(routeLine) map.removeLayer(routeLine);
+
+routeLine = L.polyline([data.fromCoords, data.toCoords],{color:'#111',weight:3,dashArray:'6 8',opacity:.6}).addTo(map);
+marker = L.marker(data.fromCoords,{icon:L.divIcon({html:'🏪',className:'',iconSize:[30,30]})}).addTo(map).bindPopup("Pickup: "+data.from);
+courierMarker = L.marker(data.courierCoords,{icon:L.divIcon({html:'<div style="background:#ff3b30;color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3)">🚚</div>',className:'',iconSize:[32,32]})}).addTo(map).bindPopup("Package LIVE here");
+
+L.marker(data.toCoords,{icon:L.divIcon({html:'🏠',className:'',iconSize:[30,30]})}).addTo(map).bindPopup("Delivery: "+data.address);
+
+document.getElementById('mapInfo').innerHTML=`🔴 LIVE: Package dey <b>${calcDist(data.courierCoords,data.toCoords).toFixed(1)} km</b> away from delivery. Last update: Just now`;
+},300);
+
+const shareUrl = location.href.includes('?track=')? location.href : `${location.origin+location.pathname}?track=${data.code}&d=${params.get('d')||encodeData(data)}`;
+document.getElementById('shareBox').style.display="block";
+document.getElementById('shareLink').textContent=shareUrl;
+currentLink=shareUrl;
+}
+
+function renderTimeline(data){
+document.getElementById('timeline').innerHTML=data.timeline.map(t=>`<div class="step"><div class="dot ${t.done?'':'pending'}">${t.done?'✓':'•'}</div><div><b style="font-size:13px">${t.title}</b><br><span style="font-size:11px;color:#666">${t.desc}</span></div><div style="margin-left:auto;font-size:10px;font-weight:700">${t.time}</div></div>`).join("");
+}
+
+function calcDist(a,b){ const R=6371; const dLat=(b[0]-a[0])*Math.PI/180; const dLon=(b[1]-a[1])*Math.PI/180; const lat1=a[0]*Math.PI/180; const lat2=b[0]*Math.PI/180; const x=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)); }
+
+function shareCourierLocation(){
+if(!navigator.geolocation) return alert("GPS not supported");
+navigator.geolocation.getCurrentPosition(pos=>{
+const coords=[pos.coords.latitude,pos.coords.longitude];
+if(!currentData) return alert("Track package first");
+currentData.courierCoords=coords;
+const enc=encodeData(currentData);
+const link=`${location.origin+location.pathname}?track=${currentData.code}&d=${enc}`;
+history.replaceState(null,'',link);
 trackPackage();
+alert("✅ Live location updated! Customer go see package for new location now!\n\nNew link:\n"+link+"\n\nShare am to customer!");
+}, err=>alert("Enable GPS: "+err.message), {enableHighAccuracy:true});
+}
+
+function simulateMovement(){
+if(!currentData) return alert("Track first");
+let steps=20; let i=0;
+const start=[...currentData.courierCoords]; const end=currentData.toCoords;
+const interval=setInterval(()=>{
+i++; const lat=start[0]+(end[0]-start[0])*(i/steps); const lng=start[1]+(end[1]-start[1])*(i/steps);
+currentData.courierCoords=[lat,lng];
+if(courierMarker) courierMarker.setLatLng([lat,lng]);
+document.getElementById('mapInfo').innerHTML=`🔴 LIVE MOVING: ${calcDist([lat,lng],end).toFixed(2)} km to delivery • Speed 40 km/h`;
+if(i>=steps){ clearInterval(interval); currentData.timeline[3].done=true; renderTimeline(currentData); document.getElementById('mapInfo').innerHTML=`✅ ARRIVED! Package don reach destination!`; }
+},800);
+}
+
+function useMyLocation(type){
+navigator.geolocation.getCurrentPosition(pos=>{
+const c=[pos.coords.latitude,pos.coords.longitude];
+if(type==='from'){ window._fromCoords=c; document.getElementById('fromLoc').value=`My Location (${c[0].toFixed(4)},${c[1].toFixed(4)})`; }
+else{ window._toCoords=c; document.getElementById('rAddress').value=`My Location (${c[0].toFixed(4)},${c[1].toFixed(4)})`; }
+alert("Location set!");
+});
+}
+
+function copyLink(){ navigator.clipboard.writeText(currentLink); alert("Link copied! Share for WhatsApp"); const t=encodeURIComponent(`🔴 LIVE TRACKING!\nCode: ${currentData.code}\nMap: ${currentLink}`); window.open(`https://wa.me/2347067087764?text=${t}`,"_blank"); }
+function showCreate(){document.getElementById('trackView').style.display="none";document.getElementById('createView').style.display="block";initMap();}
+function showTrack(){document.getElementById('createView').style.display="none";document.getElementById('trackView').style.display="block";initMap();}
+
+window.onload=()=>{ initMap(); const p=new URLSearchParams(location.search); if(p.get('track')){document.getElementById('trackInput').value=p.get('track'); trackPackage();} };
 </script>
 </body>
 </html>
