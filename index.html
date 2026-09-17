@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VELUXE EXPRESS - Track Your Package</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Space Grotesk',sans-serif;background:#fafaf7;color:#0a0a0a}
+header{position:sticky;top:0;z-index:50;background:#fafaf7;border-bottom:1px solid #e5e5e0;display:flex;align-items:center;justify-content:space-between;padding:16px 20px}
+.logo{font-size:24px;font-weight:700;letter-spacing:5px}
+.nav{display:none;gap:18px;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.nav span{cursor:pointer}
+.btn{padding:10px 18px;border:1px solid #000;border-radius:20px;background:#fff;font-weight:700;font-size:11px;letter-spacing:1px;cursor:pointer}
+.hero{padding:30px 20px;display:grid;grid-template-columns:1fr}
+.hero h1{font-size:36px;letter-spacing:-1px;line-height:.9}
+.hero p{font-size:12px;letter-spacing:2px;margin-top:8px;text-transform:uppercase}
+.track-box{margin-top:20px;display:flex;gap:10px}
+.track-box input{flex:1;padding:16px;border:1px solid #ddd;border-radius:10px;font-size:16px;font-family:inherit;letter-spacing:1px}
+.track-btn{padding:0 28px;background:#000;color:#fff;border:0;border-radius:10px;font-weight:700;letter-spacing:1px;cursor:pointer}
+.hint{font-size:11px;color:#777;margin-top:10px}
+.status{margin-top:30px}
+.status h3{font-size:14px;letter-spacing:1px;margin-bottom:16px;text-transform:uppercase}
+.timeline{border-left:1px dashed #ccc;margin-left:20px;padding-left:0}
+.step{display:flex;gap:14px;padding:14px 0 14px 0;position:relative;border-bottom:1px solid #eee}
+.step:last-child{border:0}
+.dot{width:40px;height:40px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;margin-left:-20px;flex-shrink:0}
+.dot.pending{background:#fff;border:2px solid #000;color:#000}
+.step-info{flex:1}
+.step-info b{font-size:13px;display:block}
+.step-info span{font-size:11px;color:#666;display:block;margin-top:2px}
+.step-time{font-size:11px;color:#000;font-weight:600}
+.card{margin:20px;background:#fff;border:1px solid #e5e5e0;border-radius:16px;padding:16px}
+.card h3{font-size:13px;letter-spacing:1px;margin-bottom:12px}
+.card input,.card select{width:100%;padding:12px;border:1px solid #e5e5e0;border-radius:8px;margin-top:8px;font-family:inherit}
+.create-btn{width:100%;margin-top:14px;padding:16px;background:#000;color:#fff;border:0;border-radius:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer}
+.code-box{margin-top:16px;padding:16px;background:#000;color:#fff;border-radius:12px;text-align:center;display:none}
+.code-box b{font-size:22px;letter-spacing:3px;display:block;margin-top:6px}
+.footer{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:20px;font-size:10px;border-top:1px solid #e5e5e0;margin-top:20px}
+.footer b{display:block;margin-bottom:6px;font-size:11px}
+@media(min-width:800px){.hero{grid-template-columns:1fr 1fr;gap:40px;align-items:start}.nav{display:flex}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">VELUXE</div>
+<div class="nav"><span onclick="showTrack()">HOME</span><span>•</span><span>SERVICES</span><span>•</span><span onclick="showTrack()">TRACK</span><span>•</span><span onclick="showCreate()">SHIP</span><span>•</span><span>CONTACT</span></div>
+<button class="btn" onclick="alert('Login coming soon')">SIGN IN</button>
+</header>
+
+<div id="trackView">
+<div class="hero">
+<div>
+<h1>TRACK YOUR PACKAGE</h1>
+<p>Enter Tracking Code</p>
+<div class="track-box">
+<input id="trackInput" placeholder="VLX-892734" value="VLX-892734">
+<button class="track-btn" onclick="trackPackage()">TRACK</button>
+</div>
+<div class="hint">Enter your tracking number to view real-time shipment updates and delivery status</div>
+
+<div class="status" id="statusArea">
+<h3>Shipment Status</h3>
+<div class="timeline" id="timeline"></div>
+</div>
+</div>
+
+<div style="padding:20px">
+<div class="card">
+<h3>📦 Package Details</h3>
+<div id="pkgDetails" style="font-size:12px;line-height:1.8;color:#555">Enter tracking code to view details</div>
+</div>
+
+<div class="card">
+<h3>Try Demo Code</h3>
+<div style="font-size:11px;color:#666">Use this test code: <b>VLX-892734</b><br><br>Or create new shipment below to generate your own tracking code!</div>
+<button class="create-btn" style="background:#fff;color:#000;border:1px solid #000" onclick="showCreate()">Create Shipment + Get Tracking Code</button>
+</div>
+</div>
+</div>
+</div>
+
+<div id="createView" style="display:none;padding:20px">
+<div class="card" style="max-width:500px;margin:0 auto">
+<h3>🚚 Create New Shipment - Generate Tracking Code</h3>
+<input id="sName" placeholder="Sender Name">
+<input id="sPhone" placeholder="Sender Phone e.g 07067087764">
+<input id="rName" placeholder="Receiver Name">
+<input id="rPhone" placeholder="Receiver Phone">
+<input id="rAddress" placeholder="Receiver Address e.g Warri, Delta">
+<select id="itemType"><option>Clothes (VELUXE)</option><option>Documents</option><option>Electronics</option><option>Food</option><option>Other Package</option></select>
+<select id="service"><option>Express (24hrs) - $15</option><option>Same Day - $25</option><option>Next Day - $10</option></select>
+<button class="create-btn" onclick="createShipment()">Generate Tracking Code</button>
+
+<div id="codeResult" class="code-box">
+<div style="font-size:10px;letter-spacing:2px;opacity:.7">YOUR TRACKING CODE</div>
+<b id="generatedCode">VLX-XXXXXX</b>
+<div style="font-size:11px;margin-top:10px">Share this code with receiver to track!</div>
+<button class="create-btn" style="background:#fff;color:#000;margin-top:14px" onclick="copyCode()">Copy Code + Track via WhatsApp</button>
+<button class="create-btn" style="background:transparent;color:#fff;border:1px solid #fff;margin-top:8px" onclick="showTrack()">Track Now</button>
+</div>
+</div>
+</div>
+
+<div class="footer">
+<div><b>DELIVERY</b>Express Delivery • Same Day • Scheduled</div>
+<div><b>SUPPORT</b>Help Center • FAQs • Contact - 07067087764</div>
+<div><b>VELUXE</b>About • Careers • Security</div>
+</div>
+<div style="text-align:center;padding:12px;font-size:9px;letter-spacing:1px;opacity:.5">© 2024 VELUXE — PREMIUM COURIER SERVICE • PRIVACY • TERMS</div>
+
+<script>
+// Storage
+let shipments = JSON.parse(localStorage.getItem("veluxe_shipments")||"{}");
+// Demo shipment
+if(!shipments["VLX-892734"]){
+shipments["VLX-892734"]={
+code:"VLX-892734",sender:"VELUXE Store",receiver:"John Doe",address:"Warri, Delta State",item:"VELUXE Hoodie - Onyx",service:"Express",
+timeline:[
+{title:"Order Placed",desc:"Label created",time:"Oct 12, 09:14 AM",done:true},
+{title:"Picked Up",desc:"Package picked up by VELUXE courier",time:"Oct 12, 10:32 AM",done:true},
+{title:"In Transit",desc:"Departed sorting facility, en route to local hub",time:"Oct 12, 02:45 PM",done:true},
+{title:"Out for Delivery",desc:"With courier, scheduled for delivery today",time:"Oct 12, 05:10 PM",done:true},
+{title:"Estimated Delivery",desc:"On track, delivery arriving soon",time:"Today • 6:30 PM",done:false}
+]
+};
+localStorage.setItem("veluxe_shipments",JSON.stringify(shipments));
+}
+
+function trackPackage(){
+const code=document.getElementById("trackInput").value.trim().toUpperCase();
+if(!code)return alert("Enter tracking code");
+const data=shipments[code];
+if(!data){
+document.getElementById("timeline").innerHTML=`<div style="padding:20px;color:#888;font-size:12px">❌ Tracking code <b>${code}</b> not found.<br>Create new shipment to generate valid code.</div>`;
+document.getElementById("pkgDetails").innerHTML=`Code <b>${code}</b> not found.`;
+return;
+}
+renderTimeline(data);
+document.getElementById("pkgDetails").innerHTML=`<b>Code:</b> ${data.code}<br><b>From:</b> ${data.sender}<br><b>To:</b> ${data.receiver}<br><b>Address:</b> ${data.address}<br><b>Item:</b> ${data.item}<br><b>Service:</b> ${data.service}`;
+}
+
+function renderTimeline(data){
+const html=data.timeline.map(t=>`
+<div class="step">
+<div class="dot ${t.done?'':'pending'}">${t.done?'✓':'•'}</div>
+<div class="step-info"><b>${t.title}</b><span>${t.desc}</span></div>
+<div class="step-time">${t.time}</div>
+</div>`).join("");
+document.getElementById("timeline").innerHTML=html;
+}
+
+function createShipment(){
+const sName=document.getElementById("sName").value||"VELUXE Store";
+const sPhone=document.getElementById("sPhone").value||"07067087764";
+const rName=document.getElementById("rName").value;
+const rPhone=document.getElementById("rPhone").value;
+const rAddress=document.getElementById("rAddress").value;
+const itemType=document.getElementById("itemType").value;
+const service=document.getElementById("service").value;
+if(!rName||!rAddress)return alert("Enter receiver name and address");
+
+// Generate unique tracking code like VLX-892734
+const code="VLX-"+Math.floor(100000+Math.random()*900000);
+const now=new Date().toLocaleString();
+
+shipments[code]={
+code, sender:sName, senderPhone:sPhone, receiver:rName, receiverPhone:rPhone, address:rAddress, item:itemType, service,
+timeline:[
+{title:"Order Placed",desc:`Label created by ${sName}`,time:now,done:true},
+{title:"Picked Up",desc:"Awaiting pickup by VELUXE courier",time:"Pending",done:false},
+{title:"In Transit",desc:"Will depart sorting facility",time:"Pending",done:false},
+{title:"Out for Delivery",desc:"Scheduled for delivery",time:"Pending",done:false},
+{title:"Estimated Delivery",desc:"On track",time:"Tomorrow",done:false}
+]
+};
+localStorage.setItem("veluxe_shipments",JSON.stringify(shipments));
+
+document.getElementById("generatedCode").textContent=code;
+document.getElementById("codeResult").style.display="block";
+document.getElementById("trackInput").value=code;
+window.scrollTo(0,0);
+}
+
+function copyCode(){
+const code=document.getElementById("generatedCode").textContent;
+navigator.clipboard.writeText(code);
+const text=encodeURIComponent(`🚚 VELUXE EXPRESS - New Shipment!\n\nTracking Code: *${code}*\nTrack here: https://veluxe820.github.io/VELUXE-EXPRESS/\n\nSender: ${document.getElementById("sName").value}\nReceiver: ${document.getElementById("rName").value}\nAddress: ${document.getElementById("rAddress").value}\nItem: ${document.getElementById("itemType").value}\n\nShare this code with customer to track!`);
+window.open(`https://wa.me/2347067087764?text=${text}`,"_blank");
+}
+
+function showCreate(){document.getElementById("trackView").style.display="none";document.getElementById("createView").style.display="block"}
+function showTrack(){document.getElementById("createView").style.display="none";document.getElementById("trackView").style.display="block";trackPackage()}
+
+// Auto track demo on load
+trackPackage();
+</script>
+</body>
+</html>
