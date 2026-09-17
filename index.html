@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VELUXE EXPRESS - Live Tracking</title>
+<title>VELUXE WORLDWIDE EXPRESS - Live Tracking</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -11,42 +11,41 @@
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Space Grotesk',sans-serif;background:#fbfaf6;color:#111}
 header{position:sticky;top:0;z-index:100;background:#fbfaf6f0;backdrop-filter:blur(12px);border-bottom:1px solid #e8e6de;display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
-.logo{font-size:22px;font-weight:700;letter-spacing:5px}
+.logo{font-size:20px;font-weight:700;letter-spacing:4px}
 .btn{padding:10px 16px;border:1px solid #111;border-radius:20px;background:#fff;font-weight:700;font-size:10px;cursor:pointer}
-.hero{padding:20px 16px;max-width:1200px;margin:0 auto}
-.hero h1{font-size:30px;letter-spacing:-1px;line-height:.9}
+.hero{padding:18px 16px;max-width:1200px;margin:0 auto}
+.hero h1{font-size:28px;letter-spacing:-1px;line-height:.9}
 .sub{font-size:10px;letter-spacing:2px;opacity:.6;margin-top:6px;text-transform:uppercase}
-.track-wrap{margin-top:16px;background:#fff;border:1px solid #e8e6de;border-radius:14px;padding:10px;display:flex;gap:8px}
+.track-wrap{margin-top:14px;background:#fff;border:1px solid #e8e6de;border-radius:14px;padding:10px;display:flex;gap:8px}
 .track-wrap input{flex:1;padding:12px;border:1px solid #eee;border-radius:8px;font-family:'JetBrains Mono',monospace;text-transform:uppercase}
 .track-btn{padding:0 20px;background:#111;color:#fff;border:0;border-radius:8px;font-weight:700;cursor:pointer}
-.grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:18px}
-@media(min-width:900px){.grid{grid-template-columns:1.1fr.9fr}}
+.grid{display:grid;grid-template-columns:1fr;gap:14px;margin-top:16px}
+@media(min-width:900px){.grid{grid-template-columns:1.2fr.8fr}}
 .card{background:#fff;border:1px solid #e8e6de;border-radius:16px;padding:16px}
-.card h3{font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px}
-#map{height:340px;border-radius:14px;z-index:1}
-.timeline{padding-left:24px;position:relative}
-.timeline::before{content:'';position:absolute;left:9px;top:10px;bottom:10px;width:1px;border-left:1px dashed #bbb}
-.step{position:relative;display:flex;gap:10px;padding:12px 0;border-bottom:1px solid #f0eee8}
-.dot{position:absolute;left:-24px;width:20px;height:20px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px}
-.dot.pending{background:#fff;border:2px solid #111;color:#111}
-.live-badge{animation:pulse 1.5s infinite;background:#ff3b30;color:#fff;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.card h3{font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px}
+#map{height:380px;border-radius:14px;z-index:1}
+.live-badge{animation:pulse 1.5s infinite;background:#ff3b30;color:#fff;padding:4px 10px;border-radius:20px;font-size:9px;font-weight:700;display:inline-flex;gap:5px}
 @keyframes pulse{0%{opacity:1}50%{opacity:.6}100%{opacity:1}}
 .mono{font-family:'JetBrains Mono',monospace}
 .input{width:100%;padding:12px;border:1px solid #e8e6de;border-radius:10px;margin-top:8px;font-family:inherit}
 .create-btn{width:100%;margin-top:12px;padding:14px;background:#111;color:#fff;border:0;border-radius:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer}
-.loc-row{display:flex;gap:8px;margin-top:8px}
-.loc-row button{flex:1;padding:10px;border:1px solid #111;border-radius:8px;background:#fff;font-size:11px;font-weight:700;cursor:pointer}
+.loc-row{display:flex;gap:6px;margin-top:8px}
+.loc-row button{flex:1;padding:10px;border:1px solid #111;border-radius:8px;background:#fff;font-size:10px;font-weight:700;cursor:pointer}
+.speed{font-size:10px;background:#f5f3ee;padding:8px;border-radius:8px;margin-top:8px;display:flex;justify-content:space-between}
+.world{display:flex;gap:6px;overflow-x:auto;padding:8px 0}
+.world span{white-space:nowrap;padding:6px 12px;border:1px solid #111;border-radius:20px;font-size:10px;cursor:pointer;background:#fff}
+.world span.active{background:#111;color:#fff}
 </style>
 </head>
 <body>
 <header>
-<div class="logo">VELUXE</div>
+<div class="logo">VELUXE WORLDWIDE</div>
 <button class="btn" onclick="showCreate()">+ NEW SHIPMENT</button>
 </header>
 
 <div id="trackView" class="hero">
-<h1>Live Package Tracking</h1>
-<div class="sub">Enter code • See package moving live on map</div>
+<h1>Worldwide Live Tracking</h1>
+<div class="sub">Warri • Lagos • London • New York • Anywhere</div>
 <div class="track-wrap">
 <input id="trackInput" placeholder="VLX-892734">
 <button class="track-btn" onclick="trackPackage()">TRACK</button>
@@ -56,120 +55,122 @@ header{position:sticky;top:0;z-index:100;background:#fbfaf6f0;backdrop-filter:bl
 <div>
 <div class="card">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-<h3 style="margin:0">Shipment Status</h3><div class="live-badge">● LIVE</div>
+<h3 style="margin:0">Live Status</h3><div class="live-badge">● LIVE GPS</div>
 </div>
-<div class="timeline" id="timeline"></div>
+<div id="timeline"></div>
+<div class="speed"><span>🚚 Speed: <b id="speed">0 km/h</b></span><span>📏 Left: <b id="dist">0 km</b></span><span>⏱️ ETA: <b id="eta">--</b></span></div>
 </div>
 
 <div class="card" id="courierCard" style="display:none">
-<h3>🚚 Courier Live Location</h3>
-<div id="courierInfo" style="font-size:12px"></div>
+<h3>🚚 Courier Control (Real GPS)</h3>
+<div id="courierInfo" style="font-size:11px"></div>
 <div class="loc-row">
-<button onclick="shareCourierLocation()">📍 Share My Live Location (Courier)</button>
-<button onclick="simulateMovement()">▶️ Simulate Movement</button>
+<button onclick="shareRealLocation()">📍 Update Real GPS Location</button>
+<button onclick="startSlowMovement()">🐢 Start Realistic Delivery (Slow)</button>
 </div>
-<div style="font-size:10px;color:#777;margin-top:8px">Courier click first button to update real location via GPS. Customer go see package dey move instantly!</div>
+<button onclick="stopMovement()" style="width:100%;margin-top:8px;padding:8px;border:1px solid #ff3b30;color:#ff3b30;background:#fff;border-radius:8px;font-size:11px;font-weight:700">⏸️ Stop Truck</button>
 </div>
 </div>
 
 <div>
 <div class="card">
-<h3>🗺️ Live Map - Package Location</h3>
+<h3>🗺️ Worldwide Live Map</h3>
 <div id="map"></div>
-<div id="mapInfo" style="margin-top:10px;font-size:11px;color:#555"></div>
+<div id="mapInfo" style="margin-top:8px;font-size:11px"></div>
+</div>
+<div class="card">
+<h3>📦 Details</h3>
+<div id="pkgDetails" style="font-size:12px;line-height:1.7"></div>
+<div id="shareBox" style="display:none;margin-top:10px">
+<div style="font-size:9px;font-weight:700">SHAREABLE WORLDWIDE LINK:</div>
+<div id="shareLink" style="margin-top:6px;background:#111;color:#0f0;padding:8px;border-radius:8px;font-size:8px;word-break:break-all;font-family:'JetBrains Mono',monospace"></div>
+<button class="create-btn" style="background:#fff;color:#111;border:1px solid #111;margin-top:8px;font-size:11px" onclick="copyLink()">Copy + WhatsApp</button>
+</div>
+</div>
+</div>
+</div>
 </div>
 
+<div id="createView" style="display:none;padding:16px;max-width:600px;margin:0 auto">
 <div class="card">
-<h3>📦 Package Details</h3>
-<div id="pkgDetails" style="font-size:12px;line-height:1.8"></div>
-<div id="shareBox" style="margin-top:12px;display:none">
-<div style="font-size:10px;font-weight:700;letter-spacing:1px">SHAREABLE TRACKING LINK (Works for anyone):</div>
-<div id="shareLink" style="margin-top:6px;background:#111;color:#0f0;padding:8px;border-radius:8px;font-size:9px;word-break:break-all;font-family:'JetBrains Mono',monospace"></div>
-<button class="create-btn" style="background:#fff;color:#111;border:1px solid #111;margin-top:8px" onclick="copyLink()">Copy Link + WhatsApp Customer</button>
+<h3>🌍 Create Worldwide Shipment</h3>
+<div class="world">
+<span onclick="setRoute('Warri','Lagos')" class="active">Warri → Lagos</span>
+<span onclick="setRoute('Warri','London')">Warri → London</span>
+<span onclick="setRoute('Lagos','New York')">Lagos → New York</span>
+<span onclick="setRoute('Warri','Warri')">Warri → Warri</span>
+<span onclick="setRoute('London','Dubai')">London → Dubai</span>
 </div>
-</div>
-</div>
-</div>
-</div>
-
-<div id="createView" style="display:none;padding:16px;max-width:560px;margin:0 auto">
-<div class="card">
-<h3>🚀 Create Shipment With Live Tracking</h3>
-<input id="sName" class="input" value="VELUXE Store" placeholder="Sender">
+<input id="sName" class="input" value="VELUXE Store">
 <input id="rName" class="input" placeholder="Receiver Name *">
-<input id="rPhone" class="input" placeholder="Receiver Phone e.g 07067087764">
-<input id="rAddress" class="input" placeholder="Delivery Address * e.g Enerhen, Warri">
-<input id="fromLoc" class="input" placeholder="From Location e.g Warri Hub" value="Warri Hub, Delta State">
-<div class="loc-row">
-<button onclick="useMyLocation('from')">📍 Use My Location as Pickup</button>
-<button onclick="useMyLocation('to')">📍 Use My Location as Delivery</button>
-</div>
-<select id="itemType" class="input"><option>VELUXE Hoodie</option><option>VELUXE Cargo</option><option>Documents</option><option>Other</option></select>
-<button class="create-btn" onclick="createShipment()">Generate Live Tracking Link</button>
-<div id="codeResult" style="display:none;margin-top:16px;background:#111;color:#fff;border-radius:14px;padding:16px;text-align:center">
-<div style="font-size:10px;opacity:.6">TRACKING CODE</div>
-<b id="genCode" style="font-family:'JetBrains Mono',monospace;font-size:22px;letter-spacing:3px;display:block;margin:8px 0"></b>
-<div id="genLink" style="background:#222;padding:8px;border-radius:8px;font-size:9px;word-break:break-all;font-family:'JetBrains Mono',monospace;margin-top:10px"></div>
-<button class="create-btn" style="background:#fff;color:#000" onclick="copyGen()">Copy + Share via WhatsApp</button>
-<button class="create-btn" style="background:transparent;border:1px solid #fff" onclick="openGen()">Open Live Tracking</button>
+<input id="fromInput" class="input" value="Warri, Nigeria" placeholder="From - e.g Warri, Nigeria">
+<input id="toInput" class="input" value="Lagos, Nigeria" placeholder="To - e.g London, UK or Enerhen, Warri *">
+<input id="rPhone" class="input" placeholder="Receiver Phone">
+<select id="itemType" class="input"><option>VELUXE Package</option><option>Documents</option><option>Fashion</option><option>Electronics</option></select>
+<select id="speedSel" class="input"><option value="30">🐢 Slow Van - 30 km/h (Realistic)</option><option value="60">🚐 Fast Van - 60 km/h</option><option value="800">✈️ Air Freight - 800 km/h</option></select>
+<button class="create-btn" onclick="createWorldwide()">🌍 Generate Worldwide Tracking Link</button>
+<div id="codeResult" style="display:none;margin-top:14px;background:#111;color:#fff;border-radius:14px;padding:14px;text-align:center">
+<b id="genCode" class="mono" style="font-size:20px;letter-spacing:3px"></b>
+<div id="genLink" style="background:#222;padding:8px;border-radius:8px;font-size:8px;word-break:break-all;margin-top:8px;font-family:'JetBrains Mono',monospace"></div>
+<button class="create-btn" style="background:#fff;color:#000;margin-top:10px" onclick="copyGen()">Copy Link + WhatsApp Customer</button>
+<button class="create-btn" style="background:transparent;border:1px solid #fff;margin-top:6px" onclick="openGen()">Track Live Now</button>
 </div>
 </div>
-<button class="btn" style="margin:20px auto;display:block" onclick="showTrack()">← Back to Track</button>
+<button class="btn" style="margin:16px auto;display:block" onclick="showTrack()">← Back</button>
 </div>
 
 <script>
-let map, marker, routeLine, courierMarker;
-let currentData=null, currentLink="";
-let watchId=null;
+let map, courierMarker, routeLine, fromMarker, toMarker;
+let currentData=null, currentLink="", moveInterval=null;
+let isMoving=false;
 
-// Warri default coords
-const WARRI = [5.517, 5.75];
-const LOCATIONS = {
-"Warri Hub, Delta State": [5.517, 5.75],
-"Enerhen, Warri": [5.53, 5.78],
-"Effurun": [5.56, 5.78],
-"PTI, Warri": [5.57, 5.80],
-"Sapele Road": [5.51, 5.73],
-"Lagos": [6.524, 3.379],
-"PH": [4.815, 7.049]
+const WORLD_COORDS={
+"Warri": [5.517,5.75], "Warri, Nigeria":[5.517,5.75], "Enerhen, Warri":[5.53,5.78], "Lagos":[6.524,3.379], "Lagos, Nigeria":[6.524,3.379],
+"London":[51.507, -0.127], "London, UK":[51.507,-0.127], "New York":[40.712,-74.006], "New York, USA":[40.712,-74.006],
+"Dubai":[25.204,55.27], "Dubai, UAE":[25.204,55.27], "Abuja":[9.076,7.398], "PH":[4.815,7.049], "Accra":[5.603, -0.187]
 };
 
-function initMap(){
-if(map) return;
-map = L.map('map').setView(WARRI, 12);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
-}
+function initMap(){ if(map) return; map=L.map('map').setView([5.517,5.75],5); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(map); }
 
 function encodeData(o){ return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
-function decodeData(s){ try{ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4)s+='='; return JSON.parse(decodeURIComponent(escape(atob(s)))); }catch(e){return null;} }
+function decodeData(s){ try{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return JSON.parse(decodeURIComponent(escape(atob(s))));}catch(e){return null;} }
 
-function getCoordsForAddress(addr){
-for(let k in LOCATIONS){ if(addr.toLowerCase().includes(k.toLowerCase().split(',')[0].toLowerCase())) return LOCATIONS[k]; }
-return [WARRI[0]+(Math.random()-0.5)*0.2, WARRI[1]+(Math.random()-0.5)*0.2];
+async function geocode(addr){
+if(WORLD_COORDS[addr]) return WORLD_COORDS[addr];
+try{
+const r=await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}&limit=1`);
+const d=await r.json();
+if(d[0]) return [parseFloat(d[0].lat), parseFloat(d[0].lon)];
+}catch(e){}
+return [5.517+ (Math.random()-0.5), 5.75+(Math.random()-0.5)];
 }
 
-function createShipment(){
+function calcDist(a,b){ const R=6371; const dLat=(b[0]-a[0])*Math.PI/180; const dLon=(b[1]-a[1])*Math.PI/180; const lat1=a[0]*Math.PI/180, lat2=b[0]*Math.PI/180; const x=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)); }
+
+async function createWorldwide(){
+const from=document.getElementById('fromInput').value.trim();
+const to=document.getElementById('toInput').value.trim();
 const rName=document.getElementById('rName').value.trim();
-const rAddress=document.getElementById('rAddress').value.trim();
-if(!rName||!rAddress) return alert("Enter receiver and address");
-const fromAddr=document.getElementById('fromLoc').value||"Warri Hub, Delta State";
-const fromCoords = window._fromCoords || getCoordsForAddress(fromAddr);
-const toCoords = window._toCoords || getCoordsForAddress(rAddress);
+if(!to||!rName) return alert("Enter receiver and destination");
+document.getElementById('fromInput').value="Searching...";
+const fromC=await geocode(from);
+const toC=await geocode(to);
+document.getElementById('fromInput').value=from;
 const code="VLX-"+Math.floor(100000+Math.random()*900000);
+const speed=parseInt(document.getElementById('speedSel').value);
 const data={
 code, sender:document.getElementById('sName').value, receiver:rName, phone:document.getElementById('rPhone').value,
-from:fromAddr, address:rAddress, fromCoords, toCoords, courierCoords: fromCoords,
-item:document.getElementById('itemType').value, created:new Date().toLocaleString(),
+from, to, fromCoords:fromC, toCoords:toC, courierCoords:fromC, speed, item:document.getElementById('itemType').value,
+created:new Date().toLocaleString(), totalDist:calcDist(fromC,toC),
 timeline:[
-{title:"Order Placed",desc:"Label created",time:new Date().toLocaleString(),done:true},
-{title:"Picked Up",desc:"At Warri Hub",time:new Date().toLocaleString(),done:true},
-{title:"In Transit",desc:`En route to ${rAddress}`,time:"Now • Live",done:true},
-{title:"Out for Delivery",desc:"Courier is nearby",time:"Next",done:false},
-{title:"Delivered",desc:"Estimated today 6:30 PM",time:"Pending",done:false}
+{title:"Order Placed",desc:`From ${from}`,time:new Date().toLocaleString(),done:true},
+{title:"Picked Up",desc:`Picked at ${from}`,time:new Date().toLocaleString(),done:true},
+{title:"In Transit",desc:`En route to ${to} • ${calcDist(fromC,toC).toFixed(0)} km`,time:"LIVE NOW",done:true},
+{title:"Customs / Hub",desc:"International sorting",time:"Pending",done:false},
+{title:"Out for Delivery",desc:`To ${to}`,time:"Pending",done:false}
 ]
 };
-const enc=encodeData(data);
-const link=`${location.origin+location.pathname}?track=${code}&d=${enc}`;
+const link=`${location.origin+location.pathname}?track=${code}&d=${encodeData(data)}`;
 document.getElementById('genCode').textContent=code;
 document.getElementById('genLink').textContent=link;
 document.getElementById('codeResult').style.display="block";
@@ -177,110 +178,83 @@ window._lastData=data; window._lastLink=link;
 currentData=data; currentLink=link;
 }
 
-function copyGen(){
-if(!window._lastLink) return;
-navigator.clipboard.writeText(window._lastLink);
-const t=encodeURIComponent(`🚚 VELUXE EXPRESS - LIVE TRACKING!\n\nCode: *${window._lastData.code}*\nTo: ${window._lastData.receiver}\nFrom: ${window._lastData.from} → ${window._lastData.address}\n\n🔴 LIVE MAP - See package moving:\n${window._lastLink}\n\nTrack am live!`);
-window.open(`https://wa.me/2347067087764?text=${t}`,"_blank");
-}
-
+function copyGen(){ if(!window._lastLink) return; navigator.clipboard.writeText(window._lastLink); const t=encodeURIComponent(`🌍 VELUXE WORLDWIDE EXPRESS - LIVE!\n\nCode: *${window._lastData.code}*\n${window._lastData.from} → ${window._lastData.to}\nDist: ${window._lastData.totalDist.toFixed(0)} km\nSpeed: ${window._lastData.speed} km/h\n\n🔴 Track LIVE on world map:\n${window._lastLink}`); window.open(`https://wa.me/2347067087764?text=${t}`,"_blank"); }
 function openGen(){ if(window._lastLink) location.href=window._lastLink; }
 
-function trackPackage(){
+async function trackPackage(){
 let code=document.getElementById('trackInput').value.trim().toUpperCase();
 const params=new URLSearchParams(location.search);
 if(!code) code=params.get('track')||"VLX-892734";
-let data=null;
-const enc=params.get('d');
-if(enc){ data=decodeData(enc); if(data && data.code!==code &&!params.get('track')) code=data.code; }
+let data=null; const enc=params.get('d'); if(enc) data=decodeData(enc);
 if(!data && code==="VLX-892734"){
-data={code:"VLX-892734",sender:"VELUXE Store",receiver:"Demo Customer",from:"Warri Hub",address:"Enerhen, Warri",fromCoords:WARRI,toCoords:[5.53,5.78],courierCoords:[5.525,5.76],item:"VELUXE Hoodie",created:"Oct 12, 09:14 AM",
-timeline:[
-{title:"Order Placed",desc:"Label created",time:"Oct 12, 09:14 AM",done:true},
-{title:"Picked Up",desc:"Picked at Warri Hub",time:"Oct 12, 10:32 AM",done:true},
-{title:"In Transit",desc:"En route to Enerhen - LIVE",time:"Now • 2.3km away",done:true},
-{title:"Out for Delivery",desc:"Courier nearby",time:"Next 15 mins",done:false},
-{title:"Delivered",desc:"Today 6:30 PM",time:"Pending",done:false}
-]};
+data={code:"VLX-892734",from:"Warri, Nigeria",to:"Lagos, Nigeria",fromCoords:[5.517,5.75],toCoords:[6.524,3.379],courierCoords:[5.9,4.5],speed:30,totalDist:320,sender:"VELUXE Store",receiver:"Demo Customer",item:"VELUXE Package",created:"Oct 12, 09:14 AM",
+timeline:[{title:"Order Placed",desc:"Warri Hub",time:"Oct 12, 09:14 AM",done:true},{title:"Picked Up",desc:"Warri",time:"10:32 AM",done:true},{title:"In Transit",desc:"Warri → Lagos • 320 km • LIVE",time:"Now",done:true},{title:"Out for Delivery",desc:"Lagos hub",time:"Next 4 hrs",done:false},{title:"Delivered",desc:"Est. Today",time:"Pending",done:false}]};
 }
-if(!data){ alert("Code not found. Use VLX-892734 demo or create new shipment"); return; }
-
-currentData=data;
-initMap();
-renderTimeline(data);
-document.getElementById('pkgDetails').innerHTML=`<span class="mono">${data.code}</span> • <b style="color:green">LIVE</b><br><b>From:</b> ${data.from}<br><b>To:</b> ${data.receiver} - ${data.address}<br><b>Item:</b> ${data.item}<br><b>Courier:</b> 07067087764<br><b>Distance:</b> ~${calcDist(data.fromCoords,data.toCoords).toFixed(1)} km`;
+if(!data){ alert("Not found. Use VLX-892734 or create new"); return; }
+currentData=data; initMap();
+document.getElementById('timeline').innerHTML=data.timeline.map(t=>`<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #eee;position:relative"><div style="width:18px;height:18px;border-radius:50%;background:${t.done?'#111':'#fff'};border:2px solid #111;display:flex;align-items:center;justify-content:center;color:${t.done?'#fff':'#111'};font-size:10px">${t.done?'✓':'•'}</div><div><b style="font-size:12px">${t.title}</b><br><span style="font-size:10px;color:#666">${t.desc}</span></div><div style="margin-left:auto;font-size:10px;font-weight:700">${t.time}</div></div>`).join("");
+document.getElementById('pkgDetails').innerHTML=`<span class="mono">${data.code}</span><br><b>From:</b> ${data.from}<br><b>To:</b> ${data.to}<br><b>Distance:</b> ${data.totalDist.toFixed(0)} km<br><b>Speed:</b> ${data.speed} km/h<br><b>Item:</b> ${data.item}<br><b>Receiver:</b> ${data.receiver}`;
 document.getElementById('courierCard').style.display="block";
-document.getElementById('courierInfo').innerHTML=`📦 Package at: <span class="mono">${data.courierCoords[0].toFixed(4)}, ${data.courierCoords[1].toFixed(4)}</span><br>📍 Destination: ${data.address}`;
+setTimeout(()=>{ updateMap(data); },400);
+const shareUrl=location.href.includes('?track=')?location.href:`${location.origin+location.pathname}?track=${data.code}&d=${encodeData(data)}`;
+document.getElementById('shareBox').style.display="block"; document.getElementById('shareLink').textContent=shareUrl; currentLink=shareUrl;
+}
 
-// Map update
-setTimeout(()=>{
-map.setView(data.courierCoords,13);
-if(marker) map.removeLayer(marker);
-if(courierMarker) map.removeLayer(courierMarker);
+function updateMap(data){
+if(!map) return;
+map.setView(data.courierCoords, data.totalDist>1000?3:6);
 if(routeLine) map.removeLayer(routeLine);
-
-routeLine = L.polyline([data.fromCoords, data.toCoords],{color:'#111',weight:3,dashArray:'6 8',opacity:.6}).addTo(map);
-marker = L.marker(data.fromCoords,{icon:L.divIcon({html:'🏪',className:'',iconSize:[30,30]})}).addTo(map).bindPopup("Pickup: "+data.from);
-courierMarker = L.marker(data.courierCoords,{icon:L.divIcon({html:'<div style="background:#ff3b30;color:#fff;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3)">🚚</div>',className:'',iconSize:[32,32]})}).addTo(map).bindPopup("Package LIVE here");
-
-L.marker(data.toCoords,{icon:L.divIcon({html:'🏠',className:'',iconSize:[30,30]})}).addTo(map).bindPopup("Delivery: "+data.address);
-
-document.getElementById('mapInfo').innerHTML=`🔴 LIVE: Package dey <b>${calcDist(data.courierCoords,data.toCoords).toFixed(1)} km</b> away from delivery. Last update: Just now`;
-},300);
-
-const shareUrl = location.href.includes('?track=')? location.href : `${location.origin+location.pathname}?track=${data.code}&d=${params.get('d')||encodeData(data)}`;
-document.getElementById('shareBox').style.display="block";
-document.getElementById('shareLink').textContent=shareUrl;
-currentLink=shareUrl;
+if(fromMarker) map.removeLayer(fromMarker);
+if(toMarker) map.removeLayer(toMarker);
+if(courierMarker) map.removeLayer(courierMarker);
+routeLine=L.polyline([data.fromCoords,data.toCoords],{color:'#111',weight:2,dashArray:'8 8',opacity:.5}).addTo(map);
+fromMarker=L.marker(data.fromCoords,{icon:L.divIcon({html:'🏪',className:'',iconSize:[28,28]})}).addTo(map).bindPopup(data.from);
+toMarker=L.marker(data.toCoords,{icon:L.divIcon({html:'🏠',className:'',iconSize:[28,28]})}).addTo(map).bindPopup(data.to);
+courierMarker=L.marker(data.courierCoords,{icon:L.divIcon({html:'<div style="background:#ff3b30;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.4)">🚚</div>',className:'',iconSize:[30,30]})}).addTo(map);
+document.getElementById('mapInfo').innerHTML=`🔴 LIVE: ${calcDist(data.courierCoords,data.toCoords).toFixed(1)} km to ${data.to} • Moving at ${data.speed} km/h`;
+document.getElementById('dist').textContent=calcDist(data.courierCoords,data.toCoords).toFixed(1)+' km';
+document.getElementById('speed').textContent=data.speed+' km/h';
+const hrs=calcDist(data.courierCoords,data.toCoords)/data.speed;
+document.getElementById('eta').textContent=hrs<1?Math.round(hrs*60)+' mins':hrs.toFixed(1)+' hrs';
 }
 
-function renderTimeline(data){
-document.getElementById('timeline').innerHTML=data.timeline.map(t=>`<div class="step"><div class="dot ${t.done?'':'pending'}">${t.done?'✓':'•'}</div><div><b style="font-size:13px">${t.title}</b><br><span style="font-size:11px;color:#666">${t.desc}</span></div><div style="margin-left:auto;font-size:10px;font-weight:700">${t.time}</div></div>`).join("");
-}
-
-function calcDist(a,b){ const R=6371; const dLat=(b[0]-a[0])*Math.PI/180; const dLon=(b[1]-a[1])*Math.PI/180; const lat1=a[0]*Math.PI/180; const lat2=b[0]*Math.PI/180; const x=Math.sin(dLat/2)**2+Math.cos(lat1)*Math.cos(lat2)*Math.sin(dLon/2)**2; return R*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x)); }
-
-function shareCourierLocation(){
-if(!navigator.geolocation) return alert("GPS not supported");
-navigator.geolocation.getCurrentPosition(pos=>{
-const coords=[pos.coords.latitude,pos.coords.longitude];
-if(!currentData) return alert("Track package first");
-currentData.courierCoords=coords;
-const enc=encodeData(currentData);
-const link=`${location.origin+location.pathname}?track=${currentData.code}&d=${enc}`;
-history.replaceState(null,'',link);
-trackPackage();
-alert("✅ Live location updated! Customer go see package for new location now!\n\nNew link:\n"+link+"\n\nShare am to customer!");
-}, err=>alert("Enable GPS: "+err.message), {enableHighAccuracy:true});
-}
-
-function simulateMovement(){
-if(!currentData) return alert("Track first");
-let steps=20; let i=0;
-const start=[...currentData.courierCoords]; const end=currentData.toCoords;
-const interval=setInterval(()=>{
-i++; const lat=start[0]+(end[0]-start[0])*(i/steps); const lng=start[1]+(end[1]-start[1])*(i/steps);
+function startSlowMovement(){
+if(!currentData) return alert("Track first"); if(isMoving) return;
+isMoving=true; const speed=currentData.speed; const total=currentData.totalDist;
+let progress=calcDist(currentData.fromCoords,currentData.courierCoords)/total;
+if(progress>0.9) progress=0;
+moveInterval=setInterval(()=>{
+progress+= (speed/3600 * 0.5) / total; // realistic slow: move every 0.5 sec based on speed
+if(progress>=1){ progress=1; stopMovement(); currentData.timeline[4].done=true; document.getElementById('timeline').innerHTML=currentData.timeline.map(t=>`<div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #eee"><div style="width:18px;height:18px;border-radius:50%;background:${t.done?'#111':'#fff'};border:2px solid #111;display:flex;align-items:center;justify-content:center;color:${t.done?'#fff':'#111'};font-size:10px">${t.done?'✓':'•'}</div><div><b>${t.title}</b><br><span style="font-size:10px;color:#666">${t.desc}</span></div></div>`).join(""); }
+const lat=currentData.fromCoords[0]+(currentData.toCoords[0]-currentData.fromCoords[0])*progress;
+const lng=currentData.fromCoords[1]+(currentData.toCoords[1]-currentData.fromCoords[1])*progress;
 currentData.courierCoords=[lat,lng];
 if(courierMarker) courierMarker.setLatLng([lat,lng]);
-document.getElementById('mapInfo').innerHTML=`🔴 LIVE MOVING: ${calcDist([lat,lng],end).toFixed(2)} km to delivery • Speed 40 km/h`;
-if(i>=steps){ clearInterval(interval); currentData.timeline[3].done=true; renderTimeline(currentData); document.getElementById('mapInfo').innerHTML=`✅ ARRIVED! Package don reach destination!`; }
-},800);
+document.getElementById('mapInfo').innerHTML=`🐢 Moving slow at ${speed} km/h - ${calcDist([lat,lng],currentData.toCoords).toFixed(1)} km left • Realistic delivery`;
+document.getElementById('dist').textContent=calcDist([lat,lng],currentData.toCoords).toFixed(1)+' km';
+},500); // update every 0.5 sec = slow realistic
 }
 
-function useMyLocation(type){
-navigator.geolocation.getCurrentPosition(pos=>{
-const c=[pos.coords.latitude,pos.coords.longitude];
-if(type==='from'){ window._fromCoords=c; document.getElementById('fromLoc').value=`My Location (${c[0].toFixed(4)},${c[1].toFixed(4)})`; }
-else{ window._toCoords=c; document.getElementById('rAddress').value=`My Location (${c[0].toFixed(4)},${c[1].toFixed(4)})`; }
-alert("Location set!");
-});
+function stopMovement(){ if(moveInterval) clearInterval(moveInterval); isMoving=false; }
+
+function shareRealLocation(){
+if(!navigator.geolocation) return alert("No GPS");
+navigator.geolocation.getCurrentPosition(p=>{
+const c=[p.coords.latitude,p.coords.longitude];
+currentData.courierCoords=c;
+const link=`${location.origin+location.pathname}?track=${currentData.code}&d=${encodeData(currentData)}`;
+history.replaceState(null,'',link);
+updateMap(currentData);
+alert("✅ Real GPS updated! Customer sees new location");
+},e=>alert(e.message),{enableHighAccuracy:true});
 }
 
-function copyLink(){ navigator.clipboard.writeText(currentLink); alert("Link copied! Share for WhatsApp"); const t=encodeURIComponent(`🔴 LIVE TRACKING!\nCode: ${currentData.code}\nMap: ${currentLink}`); window.open(`https://wa.me/2347067087764?text=${t}`,"_blank"); }
+function setRoute(a,b){ document.getElementById('fromInput').value=a+", Nigeria".includes(a)?a:a; document.getElementById('toInput').value=b; if(b==="London") document.getElementById('toInput').value="London, UK"; if(b==="New York") document.getElementById('toInput').value="New York, USA"; if(b==="Lagos") document.getElementById('toInput').value="Lagos, Nigeria"; if(a==="Warri"&&b==="Lagos"){document.getElementById('fromInput').value="Warri, Nigeria";document.getElementById('toInput').value="Lagos, Nigeria";} document.querySelectorAll('.world span').forEach(s=>s.classList.remove('active')); event.target.classList.add('active'); }
+
+function copyLink(){ navigator.clipboard.writeText(currentLink); const t=encodeURIComponent(`🌍 LIVE WORLDWIDE TRACKING\nCode: ${currentData.code}\n${currentData.from} → ${currentData.to}\nTrack LIVE map:\n${currentLink}`); window.open(`https://wa.me/2347067087764?text=${t}`,"_blank"); }
 function showCreate(){document.getElementById('trackView').style.display="none";document.getElementById('createView').style.display="block";initMap();}
 function showTrack(){document.getElementById('createView').style.display="none";document.getElementById('trackView').style.display="block";initMap();}
-
-window.onload=()=>{ initMap(); const p=new URLSearchParams(location.search); if(p.get('track')){document.getElementById('trackInput').value=p.get('track'); trackPackage();} };
+window.onload=()=>{initMap(); const p=new URLSearchParams(location.search); if(p.get('track')){document.getElementById('trackInput').value=p.get('track');trackPackage();}};
 </script>
 </body>
 </html>
